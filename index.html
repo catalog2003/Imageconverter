@@ -68,41 +68,14 @@
     </style>
 </head>
 <body>
+    <h1><center><color=red>This is preview but when you buy it has 30 more image format</color></center></h1>
     <div class="container">
-        <h2>Image Converter</h2>
+        <h2>Image Converter preview</h2>
         <div class="form-group">
             <label for="inputFormat">Output Format:</label>
             <select id="inputFormat">
                 <option value="jpg">JPG</option>
                 <option value="png">PNG</option>
-                <option value="webp">WebP</option>
-                <option value="gif">GIF</option>
-                <option value="tiff">TIFF</option>
-                <option value="bmp">BMP</option>
-                <option value="svg">SVG</option>
-                <option value="raw">RAW</option>
-                <option value="psd">PSD</option>
-                <option value="pdf">PDF</option>
-                <option value="eps">EPS</option>
-                <option value="ai">AI</option>
-                <option value="jpeg2000">JPEG 2000</option>
-                <option value="exr">EXR</option>
-                <option value="ico">ICO</option>
-                <option value="tga">TGA</option>
-                <option value="hdr">HDR</option>
-                <option value="pgm">PGM</option>
-                <option value="pbm">PBM</option>
-                <option value="ppm">PPM</option>
-                <option value="pcx">PCX</option>
-                <option value="wmf">WMF</option>
-                <option value="emf">EMF</option>
-                <option value="xcf">XCF</option>
-                <option value="heic">HEIC</option>
-                <option value="jp2">JP2</option>
-                <option value="dds">DDS</option>
-                <option value="pict">PICT</option>
-                <option value="cdr">CDR</option>
-                <option value="plt">PLT</option>
             </select>
         </div>
         <div class="form-group">
@@ -113,7 +86,6 @@
         <button class="btn" onclick="convertAndDownload()">Convert and Download</button>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.16.0/pdf-lib.js"></script>
     <script>
         var imagePreview = document.getElementById("imagePreview");
 
@@ -159,62 +131,6 @@
                                 var outputFormat = "jpeg"; // Convert to JPEG by default
                                 if (inputFormat === "png") {
                                     outputFormat = "png";
-                                } else if (inputFormat === "webp") {
-                                    outputFormat = "webp";
-                                } else if (inputFormat === "gif") {
-                                    outputFormat = "gif";
-                                } else if (inputFormat === "tiff") {
-                                    outputFormat = "tiff";
-                                } else if (inputFormat === "bmp") {
-                                    outputFormat = "bmp";
-                                } else if (inputFormat === "svg") {
-                                    outputFormat = "svg+xml";
-                                } else if (inputFormat === "raw") {
-                                    outputFormat = "raw";
-                                } else if (inputFormat === "psd") {
-                                    outputFormat = "psd";
-                                } else if (inputFormat === "pdf") {
-                                    outputFormat = "pdf";
-                                } else if (inputFormat === "eps") {
-                                    outputFormat = "eps";
-                                } else if (inputFormat === "ai") {
-                                    outputFormat = "ai";
-                                } else if (inputFormat === "jpeg2000") {
-                                    outputFormat = "jp2";
-                                } else if (inputFormat === "exr") {
-                                    outputFormat = "exr";
-                                } else if (inputFormat === "ico") {
-                                    outputFormat = "ico";
-                                } else if (inputFormat === "tga") {
-                                    outputFormat = "tga";
-                                } else if (inputFormat === "hdr") {
-                                    outputFormat = "hdr";
-                                } else if (inputFormat === "pgm") {
-                                    outputFormat = "pgm";
-                                } else if (inputFormat === "pbm") {
-                                    outputFormat = "pbm";
-                                } else if (inputFormat === "ppm") {
-                                    outputFormat = "ppm";
-                                } else if (inputFormat === "pcx") {
-                                    outputFormat = "pcx";
-                                } else if (inputFormat === "wmf") {
-                                    outputFormat = "wmf";
-                                } else if (inputFormat === "emf") {
-                                    outputFormat = "emf";
-                                } else if (inputFormat === "xcf") {
-                                    outputFormat = "xcf";
-                                } else if (inputFormat === "heic") {
-                                    outputFormat = "heic";
-                                } else if (inputFormat === "jp2") {
-                                    outputFormat = "jp2";
-                                } else if (inputFormat === "dds") {
-                                    outputFormat = "dds";
-                                } else if (inputFormat === "pict") {
-                                    outputFormat = "pict";
-                                } else if (inputFormat === "cdr") {
-                                    outputFormat = "cdr";
-                                } else if (inputFormat === "plt") {
-                                    outputFormat = "plt";
                                 }
 
                                 var outputCanvas = document.createElement("canvas");
@@ -225,29 +141,10 @@
 
                                 var dataUrl = outputCanvas.toDataURL("image/" + outputFormat);
 
-                                if (outputFormat === "pdf") {
-                                    var pdfDoc = await PDFLib.PDFDocument.create();
-                                    var image = await pdfDoc.embedPng(dataUrl);
-                                    var page = pdfDoc.addPage();
-                                    page.drawImage(image, {
-                                        x: 0,
-                                        y: 0,
-                                        width: page.getWidth(),
-                                        height: page.getHeight(),
-                                    });
-
-                                    var pdfBytes = await pdfDoc.save();
-                                    var blob = new Blob([pdfBytes], { type: "application/pdf" });
-                                    var link = document.createElement("a");
-                                    link.href = URL.createObjectURL(blob);
-                                    link.download = "output" + (index + 1) + ".pdf";
-                                    link.click();
-                                } else {
-                                    var link = document.createElement("a");
-                                    link.href = dataUrl;
-                                    link.download = "output" + (index + 1) + "." + outputFormat;
-                                    link.click();
-                                }
+                                var link = document.createElement("a");
+                                link.href = dataUrl;
+                                link.download = "output" + (index + 1) + "." + outputFormat;
+                                link.click();
                             };
                             img.src = event.target.result;
                         };
