@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Converter</title>
+    <style>
+        body {
+            background-color: #f2f2f2;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-top: 0;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .form-group select,
+        .form-group input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .image-preview {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .image-preview img {
+            max-width: 100%;
+            max-height: 300px;
+            margin-top: 10px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Image Converter</h2>
+        <div class="form-group">
+            <label for="inputFormat">Output Format:</label>
+            <select id="inputFormat">
+                <option value="jpg">JPG</option>
+                <option value="png">PNG</option>
+                <option value="webp">WebP</option>
+                <option value="gif">GIF</option>
+                <option value="tiff">TIFF</option>
+                <option value="bmp">BMP</option>
+                <option value="svg">SVG</option>
+                <option value="raw">RAW</option>
+                <option value="psd">PSD</option>
+                <option value="pdf">PDF</option>
+                <option value="eps">EPS</option>
+                <option value="ai">AI</option>
+                <option value="jpeg2000">JPEG 2000</option>
+                <option value="exr">EXR</option>
+                <option value="ico">ICO</option>
+                <option value="tga">TGA</option>
+                <option value="hdr">HDR</option>
+                <option value="pgm">PGM</option>
+                <option value="pbm">PBM</option>
+                <option value="ppm">PPM</option>
+                <option value="pcx">PCX</option>
+                <option value="wmf">WMF</option>
+                <option value="emf">EMF</option>
+                <option value="xcf">XCF</option>
+                <option value="heic">HEIC</option>
+                <option value="jp2">JP2</option>
+                <option value="dds">DDS</option>
+                <option value="pict">PICT</option>
+                <option value="cdr">CDR</option>
+                <option value="plt">PLT</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="imageInput">Select Image(s):</label>
+            <input type="file" id="imageInput" accept="image/*" multiple>
+        </div>
+        <div class="image-preview" id="imagePreview"></div>
+        <button class="btn" onclick="convertAndDownload()">Convert and Download</button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.16.0/pdf-lib.js"></script>
+    <script>
+        var imagePreview = document.getElementById("imagePreview");
+
+        function previewImages() {
+            var imageInput = document.getElementById("imageInput").files;
+            imagePreview.innerHTML = "";
+
+            if (imageInput.length > 0) {
+                for (var i = 0; i < imageInput.length; i++) {
+                    var reader = new FileReader();
+                    reader.onload = function (event) {
+                        var img = document.createElement("img");
+                        img.src = event.target.result;
+                        imagePreview.appendChild(img);
+                    };
+                    reader.readAsDataURL(imageInput[i]);
+                }
+            }
+        }
+
+        document.getElementById("imageInput").addEventListener("change", previewImages);
+
+        async function convertAndDownload() {
+            var inputFormat = document.getElementById("inputFormat").value;
+            var imageInput = document.getElementById("imageInput").files;
+
+            if (imageInput.length > 0) {
+                for (var i = 0; i < imageInput.length; i++) {
+                    var fileReader = new FileReader();
+                    fileReader.onload = (function (index) {
+                        return async function (event) {
+                            var img = new Image();
+                            img.onload = async function () {
+                                var maxWidth = 1200; // Set the maximum width for responsiveness
+                                var maxHeight = 800; // Set the maximum height for responsiveness
+                                var ratio = Math.min(maxWidth / img.width, maxHeight / img.height);
+                                var canvas = document.createElement("canvas");
+                                var ctx = canvas.getContext("2d");
+                                canvas.width = img.width * ratio;
+                                canvas.height = img.height * ratio;
+                                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+                                var outputFormat = "jpeg"; // Convert to JPEG by default
+                                if (inputFormat === "png") {
+                                    outputFormat = "png";
+                                } else if (inputFormat === "webp") {
+                                    outputFormat = "webp";
+                                } else if (inputFormat === "gif") {
+                                    outputFormat = "gif";
+                                } else if (inputFormat === "tiff") {
+                                    outputFormat = "tiff";
+                                } else if (inputFormat === "bmp") {
+                                    outputFormat = "bmp";
+                                } else if (inputFormat === "svg") {
+                                    outputFormat = "svg+xml";
+                                } else if (inputFormat === "raw") {
+                                    outputFormat = "raw";
+                                } else if (inputFormat === "psd") {
+                                    outputFormat = "psd";
+                                } else if (inputFormat === "pdf") {
+                                    outputFormat = "pdf";
+                                } else if (inputFormat === "eps") {
+                                    outputFormat = "eps";
+                                } else if (inputFormat === "ai") {
+                                    outputFormat = "ai";
+                                } else if (inputFormat === "jpeg2000") {
+                                    outputFormat = "jp2";
+                                } else if (inputFormat === "exr") {
+                                    outputFormat = "exr";
+                                } else if (inputFormat === "ico") {
+                                    outputFormat = "ico";
+                                } else if (inputFormat === "tga") {
+                                    outputFormat = "tga";
+                                } else if (inputFormat === "hdr") {
+                                    outputFormat = "hdr";
+                                } else if (inputFormat === "pgm") {
+                                    outputFormat = "pgm";
+                                } else if (inputFormat === "pbm") {
+                                    outputFormat = "pbm";
+                                } else if (inputFormat === "ppm") {
+                                    outputFormat = "ppm";
+                                } else if (inputFormat === "pcx") {
+                                    outputFormat = "pcx";
+                                } else if (inputFormat === "wmf") {
+                                    outputFormat = "wmf";
+                                } else if (inputFormat === "emf") {
+                                    outputFormat = "emf";
+                                } else if (inputFormat === "xcf") {
+                                    outputFormat = "xcf";
+                                } else if (inputFormat === "heic") {
+                                    outputFormat = "heic";
+                                } else if (inputFormat === "jp2") {
+                                    outputFormat = "jp2";
+                                } else if (inputFormat === "dds") {
+                                    outputFormat = "dds";
+                                } else if (inputFormat === "pict") {
+                                    outputFormat = "pict";
+                                } else if (inputFormat === "cdr") {
+                                    outputFormat = "cdr";
+                                } else if (inputFormat === "plt") {
+                                    outputFormat = "plt";
+                                }
+
+                                var outputCanvas = document.createElement("canvas");
+                                outputCanvas.width = canvas.width;
+                                outputCanvas.height = canvas.height;
+                                var outputCtx = outputCanvas.getContext("2d");
+                                outputCtx.drawImage(canvas, 0, 0);
+
+                                var dataUrl = outputCanvas.toDataURL("image/" + outputFormat);
+
+                                if (outputFormat === "pdf") {
+                                    var pdfDoc = await PDFLib.PDFDocument.create();
+                                    var image = await pdfDoc.embedPng(dataUrl);
+                                    var page = pdfDoc.addPage();
+                                    page.drawImage(image, {
+                                        x: 0,
+                                        y: 0,
+                                        width: page.getWidth(),
+                                        height: page.getHeight(),
+                                    });
+
+                                    var pdfBytes = await pdfDoc.save();
+                                    var blob = new Blob([pdfBytes], { type: "application/pdf" });
+                                    var link = document.createElement("a");
+                                    link.href = URL.createObjectURL(blob);
+                                    link.download = "output" + (index + 1) + ".pdf";
+                                    link.click();
+                                } else {
+                                    var link = document.createElement("a");
+                                    link.href = dataUrl;
+                                    link.download = "output" + (index + 1) + "." + outputFormat;
+                                    link.click();
+                                }
+                            };
+                            img.src = event.target.result;
+                        };
+                    })(i);
+                    fileReader.readAsDataURL(imageInput[i]);
+                }
+            }
+        }
+    </script>
+</body>
+</html>
